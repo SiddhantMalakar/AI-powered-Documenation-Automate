@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Project Documentation Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-4">
+
+<div class="container bg-white p-4 shadow rounded" style="max-width:700px;">
+    <h3 class="mb-3">AI Project Documentation Generator</h3>
+
+
+<!-- Basic Details -->
+<input id="name" class="form-control mb-2" placeholder="Project Name">
+<input id="industry" class="form-control mb-2" placeholder="Industry">
+<textarea id="objective" class="form-control mb-2" placeholder="Project Objective / Problem Statement"></textarea>
+
+<!-- Project Information -->
+<input id="targetUser" class="form-control mb-2" placeholder="Target Users (Students, Businesses, etc.)">
+<input id="platform" class="form-control mb-2" placeholder="Platform (Web / Mobile / Both)">
+<input id="technology" class="form-control mb-2" placeholder="Technology Stack (HTML, PHP, React, etc.)">
+
+<!-- Functional Details -->
+<input id="features" class="form-control mb-2" placeholder="Features (comma separated)">
+<input id="modules" class="form-control mb-2" placeholder="Modules (User, Admin, Payment, etc.)">
+
+<!-- Planning Details -->
+<input id="futureScope" class="form-control mb-2" placeholder="Future Scope / Enhancements">
+<input id="months" type="number" class="form-control mb-2" placeholder="Total Development Months">
+<input id="team" type="number" class="form-control mb-3" placeholder="Total Team Members">
+
+<!-- Buttons -->
+<button id="generateBtn" class="btn btn-primary w-100 mb-3">Generate Documentation</button>
+
+<h5>Output Text</h5>
+<pre id="output" class="bg-dark text-info p-3 rounded" style="min-height:150px;"></pre>
+
+<button id="downloadBtn" class="btn btn-success w-100" disabled>Download File</button>
+
+
+</div>
+
+<script>
+const API_KEY = "AIzaSyDLQuptya2FMaXNohj1WtJZZjx61JU9B30";
+
+const generateBtn = document.getElementById("generateBtn");
+const outputBox = document.getElementById("output");
+const downloadBtn = document.getElementById("downloadBtn");
+
+let generatedContent = "";
+
+// ================= GENERATE =================
+generateBtn.addEventListener("click", async () => {
+
+    const name = document.getElementById("name").value.trim();
+    const industry = document.getElementById("industry").value.trim();
+    const objective = document.getElementById("objective").value.trim();
+    const targetUser = document.getElementById("targetUser").value.trim();
+    const platform = document.getElementById("platform").value.trim();
+    const technology = document.getElementById("technology").value.trim();
+    const features = document.getElementById("features").value.trim();
+    const modules = document.getElementById("modules").value.trim();
+    const futureScope = document.getElementById("futureScope").value.trim();
+    const months = document.getElementById("months").value;
+    const team = document.getElementById("team").value;
+
+    // Validation
+    if (!name || !industry || !objective || !targetUser || !platform ||
+        !technology || !features || !modules || !futureScope || !months || !team) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    generateBtn.disabled = true;
+    generateBtn.innerText = "Generating...";
+
+    const prompt = `
+Act as a Senior Project Manager (PMP Certified) and PMO Documentation Specialist.
+
+Create complete, professional Project Management documentation suitable for real-world project submission and direct conversion into Microsoft Word.
+
+Project Information:
+Project Name: ${name}
+Industry: ${industry}
+Objective: ${objective}
+Target Users: ${targetUser}
+Platform: ${platform}
+Technology Stack: ${technology}
+Key Features: ${features}
+Modules: ${modules}
+Future Scope: ${futureScope}
+Total Development Duration: ${months} months
+Team Size: ${team}
+
+General Writing Guidelines:
+- Use formal business language.
+- Output plain text only.
+- Do NOT use markdown, JSON, emojis, or special symbols.
+- Use bullet points with hyphen (-).
+- Content should be detailed, realistic, and professional.
+- Each major section must be clearly structured with headings and subheadings.
+
+Page Formatting Instructions:
+- Insert [PAGE BREAK] before:
+  - Each new document
+  - Each cover page
+  - Major sections where appropriate
+- Each document must begin on a new page.
+- Each document must include a cover page.
+
+Cover Page Format:
+
+Document Title
+Project Name
+Industry
+Prepared By: Project Management Office (PMO)
+Prepared For: Project Stakeholders
+Version: 1.0
+Date: Current Date
+
+After the cover page, provide detailed content.
+
+Generate the following documents in order:
+
+[PAGE BREAK]
+===== Document 1: Project Charter =====
+Include:
+- Project Purpose
+- Business Need
+- Project Objectives
+- High-Level Scope
+- Key Deliverables
+- Key Stakeholders
+- Assumptions
+- Constraints
+- Success Criteria
+- Project Approval Section
+
+[PAGE BREAK]
+===== Document 2: Scope Management Plan =====
+Include:
+- Scope Management Approach
+- Scope Definition
+- In Scope
+- Out of Scope
+- Deliverables
+- Scope Validation Process
+- Scope Change Control Process
+
+[PAGE BREAK]
+===== Document 3: Work Breakdown Structure (WBS) =====
+Include:
+- Project Phases
+- Major Deliverables
+- Work Packages
+- Hierarchical breakdown of work
+
+[PAGE BREAK]
+===== Document 4: Agile Product Backlog =====
+Include:
+- Product Vision
+- User Stories in format:
+  As a [user]
+  I want [feature]
+  So that [benefit]
+- Priority (High / Medium / Low)
+- Acceptance Criteria
+
+[PAGE BREAK]
+===== Document 5: Sprint Planning (Sprint 1) =====
+Include:
+- Sprint Goal
+- Sprint Duration
+- Selected User Stories
+- Task Breakdown
+- Effort Estimation
+- Team Allocation
+- Definition of Done
+
+[PAGE BREAK]
+===== Document 6: Risk Management Plan =====
+Include:
+- Risk Management Approach
+- Risk Identification
+- Risk Analysis (Probability and Impact)
+- Risk Mitigation Strategies
+- Risk Monitoring Process
+
+[PAGE BREAK]
+===== Document 7: Communication Management Plan =====
+Include:
+- Stakeholder Communication Matrix
+- Meeting Types and Frequency
+- Reporting Structure
+- Communication Channels
+- Escalation Process
+
+[PAGE BREAK]
+===== Document 8: Future Roadmap =====
+Include:
+- Phase-wise Enhancements
+- Technology Improvements
+- Scalability Plan
+- Integration Opportunities
+- Long-Term Product Vision
+
+Additional Rules:
+- Do not include explanations outside the documents.
+- Maintain consistency across all documents.
+- Ensure content reflects a realistic software development project.
+`;
+
+    try {
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.error) {
+            outputBox.textContent = "API Error: " + data.error.message;
+            generateBtn.disabled = false;
+            generateBtn.innerText = "Generate Documentation";
+            return;
+        }
+
+        let text = data.candidates[0].content.parts[0].text;
+        text = text.replace(/```/g, "");
+
+        generatedContent = text;
+        outputBox.textContent = text;
+        downloadBtn.disabled = false;
+
+    } catch (err) {
+        outputBox.textContent = "Network / CORS Error";
+        console.error(err);
+    }
+
+    generateBtn.disabled = false;
+    generateBtn.innerText = "Generate Documentation";
+});
+
+
+// ================= DOWNLOAD WORD =================
+downloadBtn.addEventListener("click", function () {
+
+    if (!generatedContent) {
+        alert("Generate document first");
+        return;
+    }
+
+    const projectName = document.getElementById("name").value || "Project";
+
+    // Convert PAGE BREAK markers to Word page breaks
+    let formattedContent = generatedContent
+        .replace(/\[PAGE BREAK\]/g, '<div style="page-break-before: always;"></div>')
+        .replace(/\n/g, "<br>");
+
+    const htmlContent = `
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>${projectName}</title>
+    </head>
+    <body style="font-family:Calibri; font-size:12pt; line-height:1.6;">
+        ${formattedContent}
+    </body>
+    </html>
+    `;
+
+    const blob = new Blob(['\ufeff', htmlContent], {
+        type: 'application/msword'
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = projectName + "_PM_Documents.doc";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+</script>
+</body>
+</html>
